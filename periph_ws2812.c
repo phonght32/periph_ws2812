@@ -272,6 +272,7 @@ periph_ws2812_anim_handle_t periph_ws2812_anim_init(periph_ws2812_anim_cfg_t *co
 
 	periph_ws2812_t *periph_ws2812 = esp_periph_get_data(g_ws2812);
 	periph_ws2812_anim_t *anim_item = calloc(1, sizeof(periph_ws2812_anim_t));
+	WS2812_CHECK(anim_item, "error calloc anim item", return NULL);
 
 	color_hsv_t hsv;
 	rgb2hsv(config->color, &hsv);
