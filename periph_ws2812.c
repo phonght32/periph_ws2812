@@ -154,8 +154,27 @@ static void _ws2812_anim_none(periph_ws2812_anim_t *anim_item)
 	for (int i = 0; i < num_led; i++) {
 		_ws2812_set_pixel(anim_item, buf_idx, i, rgb);
 	}
+}
 
-	anim_item->buf_idx ^= 1;
+static void _ws2812_anim_fade(periph_ws2812_anim_t *anim_item)
+{
+	uint8_t buf_idx = (anim_item->buf_idx ^ 1);
+	uint32_t num_led = anim_item->num_led;
+
+    color_hsv_t hsv = {
+		.hue = anim_item->hue,
+		.sat = anim_item->sat,
+		.val = anim_item->step % COLOR_MAX_VAL,
+	};
+	uint32_t rgb;
+	hsv2rgb(hsv, &rgb);
+
+    for (int i = 0; i < num_led; i++) {
+		_ws2812_set_pixel(anim_item, buf_idx, i, rgb);
+	}
+
+    anim_item->step++;
+    if(anim_item->step > COLOR_MAX_VAL) anim_item->step = 0;
 }
 
 static void _ws2812_anim_rainbow(periph_ws2812_anim_t *anim_item)
@@ -178,7 +197,6 @@ static void _ws2812_anim_rainbow(periph_ws2812_anim_t *anim_item)
 		_ws2812_set_pixel(anim_item, buf_idx, i, rgb);
 	}
 
-	anim_item->buf_idx ^= 1;
 	anim_item->step++;
 }
 
@@ -198,6 +216,9 @@ static void _ws2812_task(void *pv)
 				case WS2812_ANIM_TYPE_NONE:
 					_ws2812_anim_none(anim_item);
 					break;
+				case WS2812_ANIM_TYPE_FADE:
+					_ws2812_anim_fade(anim_item);
+					break;
 				case WS2812_ANIM_TYPE_RAINBOW:
 					_ws2812_anim_rainbow(anim_item);
 					break;
@@ -205,6 +226,7 @@ static void _ws2812_task(void *pv)
 					_ws2812_anim_none(anim_item);
 					break;
 				}
+				anim_item->buf_idx ^= 1;
 			}
 		}
 

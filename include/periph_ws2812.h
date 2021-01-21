@@ -15,6 +15,7 @@ typedef struct  anim_item *periph_ws2812_anim_handle_t;
 
 typedef enum {
 	WS2812_ANIM_TYPE_NONE = 0,
+	WS2812_ANIM_TYPE_FADE,
 	WS2812_ANIM_TYPE_RAINBOW,
 } ws2812_anim_type_t;
 
