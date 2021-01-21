@@ -11,7 +11,6 @@ extern "C" {
 #include "driver/gpio.h"
 #include "driver/rmt.h"
 
-typedef struct periph_ws2812 *periph_ws2812_handle_t;
 typedef struct  anim_item *periph_ws2812_anim_handle_t;
 
 typedef enum {
