@@ -149,7 +149,7 @@ static void _ws2812_anim_none(periph_ws2812_anim_t *anim_item)
 		.val = anim_item->val,
 	};
 	uint32_t rgb;
-	hsv2rgb(hsv, &rgb);
+	hsv_2_rgb(hsv, &rgb);
 
 	for (int i = 0; i < num_led; i++) {
 		_ws2812_set_pixel(anim_item, buf_idx, i, rgb);
@@ -167,7 +167,7 @@ static void _ws2812_anim_fade(periph_ws2812_anim_t *anim_item)
 		.val = anim_item->step % COLOR_MAX_VAL,
 	};
 	uint32_t rgb;
-	hsv2rgb(hsv, &rgb);
+	hsv_2_rgb(hsv, &rgb);
 
     for (int i = 0; i < num_led; i++) {
 		_ws2812_set_pixel(anim_item, buf_idx, i, rgb);
@@ -193,7 +193,7 @@ static void _ws2812_anim_rainbow(periph_ws2812_anim_t *anim_item)
 			.val = val,
 		};
 		uint32_t rgb;
-		hsv2rgb(hsv, &rgb);
+		hsv_2_rgb(hsv, &rgb);
 		_ws2812_set_pixel(anim_item, buf_idx, i, rgb);
 	}
 
@@ -297,7 +297,7 @@ periph_ws2812_anim_handle_t periph_ws2812_anim_init(periph_ws2812_anim_cfg_t *co
 	WS2812_CHECK(anim_item, "error calloc anim item", return NULL);
 
 	color_hsv_t hsv;
-	rgb2hsv(config->color, &hsv);
+	rgb_2_hsv(config->color, &hsv);
 	anim_item->hue = hsv.hue;
 	anim_item->sat = hsv.sat;
 	anim_item->val = config->brightness;
@@ -388,7 +388,7 @@ esp_err_t periph_ws2812_set_color(periph_ws2812_anim_handle_t anim_item, uint32_
 
 	mutex_lock(anim_item->lock);
 	color_hsv_t hsv;
-	rgb2hsv(rgb, &hsv);
+	rgb_2_hsv(rgb, &hsv);
 	anim_item->hue = hsv.hue;
 	anim_item->sat = hsv.sat;
 	mutex_unlock(anim_item->lock);
